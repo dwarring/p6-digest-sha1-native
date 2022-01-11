@@ -22,7 +22,7 @@ class Build {
 	        %vars<LDFLAGS> = '-fPIC -O3';
 	        %vars<CCOUT> = '-o ';
 	        %vars<LDOUT> = '-o ';
-	        LibraryMake::process-makefile($folder, %vars);
+	        LibraryMake::process-makefile($dir, %vars);
 	        shell(%vars<MAKE>);
 	    }
         chdir($goback);
