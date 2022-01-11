@@ -21,6 +21,7 @@ class Build {
 	    %vars<LD> = 'gcc';
 	    %vars<LDSHARED> = '-shared';
 	    %vars<LDFLAGS> = '-fPIC -O3';
+	    %vars<LIBS> = '';
 	    %vars<CCOUT> = '-o ';
 	    %vars<LDOUT> = '-o ';
 	    process-makefile($dir, %vars);
