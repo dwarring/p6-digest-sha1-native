@@ -12,20 +12,22 @@ class Build {
         my $goback = $*CWD;
         chdir($dir);
         my $proc = shell(%vars<MAKE>);
+	chdir($goback);
         if $proc.exitcode && Rakudo::Internals.IS-WIN {
-	        note 'retrying with gcc/make (mingw)...';
-	        %vars<MAKE> = 'make';
-	        %vars<CC> = 'gcc';
-	        %vars<CCFLAGS> = '-fPIC -O3 -DNDEBUG --std=gnu99 -Wextra -Wall';
-	        %vars<LD> = 'gcc';
-	        %vars<LDSHARED> = '-shared';
-	        %vars<LDFLAGS> = '-fPIC -O3';
-	        %vars<CCOUT> = '-o ';
-	        %vars<LDOUT> = '-o ';
-	        LibraryMake::process-makefile($dir, %vars);
-	        shell(%vars<MAKE>);
-	    }
-        chdir($goback);
+	    note 'retrying with gcc/make (mingw)...';
+	    %vars<MAKE> = 'make';
+	    %vars<CC> = 'gcc';
+	    %vars<CCFLAGS> = '-fPIC -O3 -DNDEBUG --std=gnu99 -Wextra -Wall';
+	    %vars<LD> = 'gcc';
+	    %vars<LDSHARED> = '-shared';
+	    %vars<LDFLAGS> = '-fPIC -O3';
+	    %vars<CCOUT> = '-o ';
+	    %vars<LDOUT> = '-o ';
+	    process-makefile($dir, %vars);
+	    chdir($dir);
+	    shell(%vars<MAKE>);
+	    chdir($goback);
+	}
     }
 }
 
