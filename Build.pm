@@ -11,7 +11,7 @@ class Build {
         process-makefile($dir, %vars);
         my $goback = $*CWD;
         chdir($dir);
-        shell(%vars<MAKE>);
+        $proc = shell(%vars<MAKE>);
         if $proc.exitcode && Rakudo::Internals.IS-WIN {
 	        note 'retrying with gcc/make (mingw)...';
 	        %vars<MAKE> = 'make';
