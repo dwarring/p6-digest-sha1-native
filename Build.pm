@@ -14,9 +14,8 @@ class Build {
         my $proc = shell(%vars<MAKE>);
 	chdir($goback);
         if $proc.exitcode && Rakudo::Internals.IS-WIN {
-            # try again with vanilla GCC compilation and using
-            # either `make` or `gmake`.  Hopefully works with
-            # choco make + mingw or Strawberry Perl
+	    note 'retrying with gcc/gmake...';
+	    %vars<MAKE> = 'gmake';
 	    %vars<CC> = 'gcc';
 	    %vars<CCFLAGS> = '-fPIC -O3 -DNDEBUG --std=gnu99 -Wextra -Wall';
 	    %vars<LD> = 'gcc';
@@ -28,10 +27,12 @@ class Build {
             for <make gmake> -> $maker {
 	        process-makefile($dir, %vars);
 	        chdir($dir);
-	        shell(%vars<MAKE>);
+	        $proc = shell(%vars<MAKE>);
 	        chdir($goback);
+		last unless $proc.exitcode;
             }
 	}
+	!$proc.exitcode;
     }
 }
 
